@@ -1,0 +1,23 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+>
+<body>
+<main layout:fragment="content" class="d-flex gap-3 py-5 container">
+    <section class="container">
+        <h1>Orders List</h1>
+        <div class="list-group" th:if="${amount > 0}">
+            <a th:each="order: ${orders}" th:href="${'orders/'+order.getId()}" class="list-group-item list-group-item-action" aria-current="true">
+                <span th:text="${'Order #' + order.getId()}"></span>
+                <p class="fst-italic" th:text="${'Day order: ' + order.getBookingDate()}"></p>
+            </a>
+        </div>
+
+        <div th:if="${amount == 0}">
+            <h3 class="text-center">No orders yet</h3>
+        </div>
+    </section>
+</main>
+</body>
+</html>

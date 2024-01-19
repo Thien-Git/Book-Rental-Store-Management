@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Service</title>
+    <link rel="stylesheet" href="/css/khangstyleadmin.css">
+
+</head>
+<body>
+<section layout:fragment="content"  class="content-wrapper">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5>Book Case Details</h5>
+            </div>
+            <div class="card-body">
+                <h6>Bookshelf Code: <span th:text="${case.getBookshelfCode()}"></span></h6>
+                <h6>Case Number: <span th:text="${case.getCaseNumber()}"></span></h6>
+                <h6>Available Blank: <span th:text="${case.getAvailableBlank()}"></span></h6>
+            </div>
+        </div>
+        <a class="btn btn-primary" th:href="@{/staff/bookshelf/show-all}">Back to bookshelf manage</a>
+    </div>
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+</section>
+</body>
+</html>

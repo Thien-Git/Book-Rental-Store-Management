@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Styles -->
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <!-- Or for RTL support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+</head>
+<body>
+<section layout:fragment="content" class="content-wrapper">
+    <div class="user-info-container">
+        <form method="post"
+              th:action="@{/staff/categories/update/{categoryId}(categoryId=${category.getId()})}"
+              th:object="${newCategory}">
+            <div class="container">
+                <h3 class="mt-4 d-flex justify-content-center">Update category</h3>
+                <div>
+                    <div>
+                        <div class="mb-3 pt-2">
+                            <label for="name" class="form-label">Category name</label>
+                            <input
+                                    th:value="${category.getName()}"
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                            />
+                        </div>
+                        <div></div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea
+                                    th:value="${category.getDescription()}"
+                                    class="form-control"
+                                    id="description"
+                                    name="description"
+                                    rows="3"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-start">
+                                <a  th:href="@{/staff/categories}" type="button" class="btn btn-primary">Return</a>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Update category</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section layout:fragment="optional">
+</section>
+</body>
+
+</html>

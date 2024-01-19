@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employee Update</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/css/khangcustomer.css">
+  <link rel="stylesheet" href="/css/khangadminorder.css">
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+  <section layout:fragment="content" class="content-wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-10 mb-8 offset-1" style="margin-top: 5px;">
+        <div class="card">
+          <div class="row no-gutters">
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 th:text="'Customer name: '+${order.getCustomerByCustomerId().getName()}" class="card-title"></h5>
+                <p th:text="'Customer Phone: '+${order.getCustomerByCustomerId().getPhone()}" class="card-text"></p>
+                <span>Booking Day</span><p th:if="${order.getOrderStatus().toString()==booking}" th:data-time="${order.getBookingDate()}" class="card-text"></p>
+                <span>Rent Day</span><p th:if="${order.getOrderStatus().toString() == rent or order.getOrderStatus().toString()== overdue}" th:data-time="${order.getRentDate()}" class="card-text"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col-md-10 mb-8 offset-1" th:each="dt:${order.getOrderDetailsById()}">
+        <!-- Card 1 -->
+          <div  th:if="${!dt.isLost()}" class="col-md-10 mb-6" style="margin-top: 5px;">
+          <div class="card col-12">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img th:src="${dt.getBookByBookId().getPhoto()}" class="card-img" width="100%" height="200px" alt="Placeholder Image">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 th:text="'Title: '+${dt.getBookByBookId().getTitle()}" class="card-title"></h5>
+                  <p th:text="'Author: '+${dt.getBookByBookId().getAuthor()}" class="card-text">Some quick example text for Card 1.</p>
+                 <span>Bookshelf code: </span> <p th:text="${dt.getBookByBookId().getBookshelfCaseByBookshelfId()!=null}?${dt.getBookByBookId().getBookshelfCaseByBookshelfId().getBookshelfCode()}+' '+${dt.getBookByBookId().getBookshelfCaseByBookshelfId().getCaseNumber()}:'N/A'" class="card-text"></p>
+                  <a th:if="${order.getOrderStatus().toString() == rent or order.getOrderStatus().toString() ==overdue}" th:href="@{/staff/order-detail/mark-lost/{orderDetailId}(orderDetailId=${dt.getId()})}" class="btn btn-danger btn-block">Mark as lost</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-md-4 offset-md-4"> <!-- Using offset to center the div -->
+          <a th:if="${order.getOrderStatus().toString() == booking}" th:href="@{/staff/orders/rent-confirm-order/{orderId}(orderId=${order.getId()})}" class="btn btn-primary btn-block">Confirm rent</a>
+          <a th:if="${order.getOrderStatus().toString() == rent or order.getOrderStatus().toString() == overdue}" th:href="@{/staff/orders/return-confirm-order/{orderId}(orderId=${order.getId()})}" class="btn btn-success btn-block">Confirm return</a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- /.control-sidebar -->
+  </section>
+<!-- ./wrapper -->
+
+</body>
+<section layout:fragment="optional">
+  <script>//format day time
+
+  const date=document.querySelectorAll('[data-time]');
+  date.forEach((element) => {
+    const datePart = element.dataset.time.split(' ');
+// Convert the date string to a Date object
+    const date = new Date(datePart);
+// Format the Date object to the desired format
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    console.log(formattedDate);
+    element.textContent = formattedDate;
+
+  });</script>
+
+</section>
+</html>
+

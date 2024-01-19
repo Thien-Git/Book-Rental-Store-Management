@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Service</title>
+    <link rel="stylesheet" href="/css/khangstyleadmin.css">
+
+</head>
+<body>
+<section layout:fragment="content"  class="content-wrapper">
+
+
+    <!-- Content Header (Page header) -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form th:action="@{/staff/bookshelf/create}" th:object="${bookshelf}" method="post" class="form-horizontal">
+
+                        <div class="card-body">
+
+                            <div class="form-group row">
+                                <label for="serviceName" class="col-sm-2 col-form-label">Bookshelf Code</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  th:field="*{bookshelfCode}" class="form-control" id="serviceName" placeholder="BS-A-1">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('bookshelfCode')}" th:errors="*{bookshelfCode}">Invalid  Name</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button  type="submit" class="btn btn-info">Add Bookshelf</button>
+                                <a th:href="@{/staff/bookshelf/show-all}" class="btn btn-default float-right">Back</a>
+                            </div>
+                        </div>
+                        <!-- /.card-footer -->
+                    </form>
+                </div>
+            </div>
+            <!-- /.col-->
+        </div>
+        <!-- ./row -->
+        <!--modal-->
+
+
+        <!-- ./row -->
+    </section>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+    <script>$('#myModal').on('shown.bs.modal', function () {
+
+    })</script>
+</section>
+</body>
+</html>

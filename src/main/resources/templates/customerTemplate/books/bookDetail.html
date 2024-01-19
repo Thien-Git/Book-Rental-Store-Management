@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <!-- content -->
+    <section class="py-5">
+        <div class="container">
+
+            <div class="row gx-5">
+                <aside class="col-lg-6">
+                    <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                        <img style="max-width: 80%; max-height: 90vh; margin: auto;"
+                             class="rounded-4 fit"
+                             th:src="${book.getPhoto()}" />
+                    </div>
+                    <!-- thumbs-wrap.// -->
+                    <!-- gallery-wrap .end// -->
+                </aside>
+                <main class="col-lg-6">
+                    <div class="ps-lg-3">
+                        <h4 class="title text-dark"
+                            th:text="${book.getTitle()}">
+                            <br />
+                        </h4>
+                        <div class="d-flex flex-row my-3">
+                            <div class="text-warning mb-1 me-2">
+                                <th:block th:if="${book.getRating != null}">
+                                    <th:block th:if="${book.getRating() == 0.0}">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </th:block>
+                                    <!--correct-->
+                                    <th:block th:if="${book.getRating() != 0.0}" th:each="starNumber : ${#numbers.sequence(1, 5)}">
+                                        <th:block th:if="${starNumber le book.getRating()}">
+                                            <i class="fa fa-star"></i>
+                                        </th:block>
+                                        <th:block th:if="${starNumber - 0.5 == book.getRating()}">
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </th:block>
+                                        <th:block th:if="${starNumber - 0.5 gt book.getRating()}">
+                                            <i class="far fa-star"></i>
+                                        </th:block>
+                                    </th:block>
+                                </th:block>
+                                <span class="ms-1" th:text="${book.getRating()}"></span>
+                            </div>
+                            <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i></span>
+                            <p class="text-success ms-2">Available Stock :<span th:text="${book.getAvailableBook()}"></span></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="h5" th:text="'$'+ ${book.getPricePerDay()}"></span>
+                            <span class="text-muted">/per day</span>
+                        </div>
+
+
+                        <div class="row">
+                            <dt class="col-3">Categories:</dt>
+                            <dd class="col-8" th:text="${#strings.listJoin(categories, ', ')}"></dd>
+                        </div>
+
+                        <hr />
+
+                        <a th:href="@{/customers/addItemInDetail/{bookId}(bookId=${book.getId()})}"  class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+    <!-- content -->
+
+    <section class="border-top py-4">
+        <div class="container">
+            <div class="row gx-4">
+                <div class="col-lg-12 mb-4">
+                    <div class="px-3 py-2 bg-white">
+                        <!-- Pills navs -->
+                        <h3 class="d-flex justify-content-center pb-4">Customer reviews</h3>
+                        <!-- Pills navs -->
+
+                        <!-- Pills content -->
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-4">
+                                <div class="card" >
+                                    <div class="card-body p-4">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <h3 class="mb-0 ms-2">Overall</h3>
+                                        </div>
+                                        <div class="text-warning mb-1 me-2">
+                                            <th:block th:if="${book.getRating != null}">
+                                                <th:block th:if="${book.getRating() == 0.0}">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </th:block>
+                                                <!--correct-->
+                                                <th:block th:if="${book.getRating() != 0.0}" th:each="starNumber : ${#numbers.sequence(1, 5)}">
+                                                    <th:block th:if="${starNumber le book.getRating()}">
+                                                        <i class="fa fa-star"></i>
+                                                    </th:block>
+                                                    <th:block th:if="${starNumber - 0.5 == book.getRating()}">
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    </th:block>
+                                                    <th:block th:if="${starNumber - 0.5 gt book.getRating()}">
+                                                        <i class="far fa-star"></i>
+                                                    </th:block>
+                                                </th:block>
+                                            </th:block>
+                                            <span class="ms-1" th:text="${book.getRating()}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${listUserReviews == null or #lists.isEmpty(listUserReviews)}">
+                                    <h2 class="d-flex justify-content-center p-4">
+                                        There are no reviews for the product.
+                                    </h2>
+                            </div>
+                            <div  class="col-8">
+                                <div    th:if="${listUserReviews != null}"
+                                        th:each="userReview : ${listUserReviews}" class="card" >
+                                    <div class="card-body p-4">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <p class="mb-0 ms-2" th:text="${userReview.getUsername()}"></p>
+                                                </div>
+                                                <div class="text-warning mb-1 me-2">
+                                                    <th:block th:if="${userReview.getRating() != null}">
+                                                        <th:block th:if="${userReview.getRating() == 0.0}">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </th:block>
+                                                        <!--correct-->
+                                                        <th:block th:if="${userReview.getRating() != 0.0}" th:each="starNumber : ${#numbers.sequence(1, 5)}">
+                                                            <th:block th:if="${starNumber le userReview.getRating()}">
+                                                                <i class="fa fa-star"></i>
+                                                            </th:block>
+                                                            <th:block th:if="${starNumber - 0.5 == userReview.getRating()}">
+                                                                <i class="fas fa-star-half-alt"></i>
+                                                            </th:block>
+                                                            <th:block th:if="${starNumber - 0.5 gt userReview.getRating()}">
+                                                                <i class="far fa-star"></i>
+                                                            </th:block>
+                                                        </th:block>
+                                                    </th:block>
+                                                    <span class="ms-1" th:text="${userReview.getRating()}"></span>
+                                                </div>
+                                                <p th:text="${userReview.getReview()}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pills content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</section>
+</body>
+</html>

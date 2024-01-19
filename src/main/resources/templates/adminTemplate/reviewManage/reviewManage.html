@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{adminTemplate/adminlayout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Staff DashBoard</title>
+    <style>
+        .extra-info {
+            padding-left: 30px;
+            font-size: 30px;
+        }
+
+        .review-container {
+            margin-top: 30px;
+        }
+
+        @media only screen and (min-width: 990px) {
+            .review-container {
+                margin-left: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+<section class="container review-container" layout:fragment="content">
+    <h1 th:if="${amountOfReview > 0}" class="text-center mb-3">Reviews from customer</h1>
+    <section th:if="${amountOfReview > 0}">
+        <div th:each="review: ${listReview}">
+            <div class="card mb-5" style="border-radius: 15px; background-color: #424242;">
+                <div class="card-body p-4 text-white">
+                    <h3 class="mb-3"
+                        th:text="${'Book title: ' + review.getBookByBookId().getTitle()}">
+                        Program Title
+                    </h3>
+                    <p class="small mb-0">
+                        <span th:text="${review.getRating()}"></span>
+                        <i class="far fa-star fa-lg"></i>
+                        <span class="mx-2">|</span>
+                        Created by
+                        <strong
+                                th:text="${review.getOrdersByOrderId().getCustomerByCustomerId().getName()}"
+                        >
+                            MDBootstrap
+                        </strong>
+                    </p>
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 text-uppercase">
+                            <i class="far fa-comments"></i>
+                            <span
+                                    class="text-white small" th:text="${review.getReview()}">
+                    </span>
+                        </p>
+                        <div>
+                            <a class="btn btn-primary mr-3"
+                               th:href="${'/staff/update-review-rating?valid=VALID&orderDetailId=' + review.getId()}"
+                               type="button">
+                                Valid
+                            </a>
+                            <a class="btn btn-danger"
+                               th:href="${'/staff/update-review-rating?valid=INVALID&orderDetailId=' + review.getId()}"
+                               type="button">
+                                Invalid
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link"
+                       th:href="@{'/staff/review-rating?page=' + ${currentPage - 1}}"
+                       th:if="${currentPage > 1}">
+                        Previous
+                    </a>
+                </li>
+                <li
+                    th:class="${pageNumber == currentPage} ? 'page-item active' : 'page-item'"
+                    th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+                >
+                    <a class="page-link"
+                       th:href="@{'/staff/review-rating?page=' + ${pageNumber}}">
+                        <span th:text="${pageNumber}"></span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       th:href="@{'/staff/review-rating?page=' + ${currentPage + 1}}"
+                       th:if="${currentPage < totalPages}">
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+
+
+    <div th:if="${amountOfReview == 0}">
+        <h1 class="text-center">No review from customer</h1>
+    </div>
+</section>
+</body>
+</html>

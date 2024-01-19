@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+<body>
+<section layout:fragment="content" >
+<div class="container">
+  <div>
+    <p th:text="${time}"></p>
+    <table>
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Available number</th>
+        <th>rent price</th>
+        <th>Booking</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${books}">
+        <td th:text="${book.getId()}"></td>
+        <td th:text="${book.getTitle()}"></td>
+        <td th:text="${book.getAuthor()}"></td>
+        <td th:text="${book.getAvailableBook()}"></td>
+        <td th:text="${book.getPricePerDay()}"></td>
+        <td><a th:href="@{/customers/addItem/{bookId}(bookId=${book.getId()})}">Add</a></td>
+      </tr>
+      </tbody>
+    </table>
+    <a th:href="@{/customers/showCart}"> My Cart</a>
+  </div>
+</div> <!-- /container -->
+</section>
+</body>
+</html>

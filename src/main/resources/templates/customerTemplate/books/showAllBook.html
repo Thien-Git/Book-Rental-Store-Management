@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- sidebar + content -->
+<section layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <!-- sidebar -->
+            <div class="col-lg-3">
+                <!-- Toggle button -->
+                <button
+                        class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                >
+                    <span>Show filter</span>
+                </button>
+                <!-- Collapsible wrapper -->
+                <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button
+                                        class="accordion-button text-dark bg-light"
+                                        type="button"
+                                        data-mdb-toggle="collapse"
+                                        data-mdb-target="#panelsStayOpen-collapseOne"
+                                        aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseOne">
+                                    Categories
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                                <div class="accordion-body">
+                                    <div th:if="${categories == null or #lists.isEmpty(categories)}" >
+                                        <p class="d-flex justify-content-center">No categories available</p>
+                                    </div>
+                                    <ul th:if="${categories != null}" class="list-unstyled">
+                                        <li th:each="category : ${categories}" >
+                                            <a th:href="@{/customers/books/categoryId/{categoryId}(categoryId=${category.getId()})}"
+                                               class="text-dark"
+                                               th:text="${category.getName()}">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar -->
+            <!-- content -->
+            <div class="col-lg-9">
+
+                <div th:if="${books == null or #lists.isEmpty(books)}">
+                    <h2 class="d-flex justify-content-center">No books available</h2>
+                </div>
+
+                <div th:if="${books != null and not #lists.isEmpty(books)}" >
+                    <div th:each="book : ${books}">
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-md-12">
+                            <div class="card shadow-0 border rounded-3" style="height: 265px;">
+                                <div  class="card-body" >
+                                    <div class="row g-0">
+                                        <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                                            <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                                                    <img th:src="${book.getPhoto()}" class="w-100" style="height: 214px;" />
+                                                <a th:href="@{/customers/books/detail/{bookId}(bookId=${book.getId()})}">
+                                                    <div class="hover-overlay">
+                                                        <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-md-5 col-sm-7">
+                                            <a th:href="@{/customers/books/detail/{bookId}(bookId=${book.getId()})}">
+                                                <h5 th:text="${book.getTitle()}" ></h5>
+                                            </a>
+                                            <div class="d-flex flex-row">
+                                                <div class="text-warning mb-1 me-2">
+                                                    <th:block th:if="${book.getRating() != null}">
+                                                        <th:block th:if="${book.getRating() == 0.0}">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <span class="ms-1">5</span>
+                                                        </th:block>
+                                                            <!--correct-->
+                                                        <th:block th:if="${book.getRating() != 0.0}" th:each="starNumber : ${#numbers.sequence(1, 5)}">
+                                                            <th:block th:if="${starNumber le book.getRating()}">
+                                                                <i class="fa fa-star"></i>
+                                                            </th:block>
+                                                            <th:block th:if="${starNumber - 0.5 == book.getRating()}">
+                                                                <i class="fas fa-star-half-alt"></i>
+                                                            </th:block>
+                                                            <th:block th:if="${starNumber - 0.5 gt book.getRating()}">
+                                                                <i class="far fa-star"></i>
+                                                            </th:block>
+                                                        </th:block>
+                                                    </th:block>
+                                                    <span class="ms-1" th:if="${book.getRating() != 0.0}" th:text="${book.getRating()}"></span>
+                                                </div>
+                                            </div>
+
+                                            <p class="text mb-4 mb-md-0" th:text="${book.getPreview()}"></p>
+                                        </div>
+                                        <div class="col-xl-3 col-md-3 col-sm-5">
+                                            <div class="d-flex flex-row align-items-center mb-1">
+                                                <h4 class="mb-1 me-1" th:text="'$' + ${book.getPricePerDay()}"></h4>
+                                            </div>
+                                            <h6 class="text-success">Available stock: <p th:text="${book.getAvailableBook()}"></p></h6>
+                                            <div class="mt-4">
+                                                <a th:href="@{/customers/addItem/{bookId}(bookId=${book.getId()})}" class="btn btn-primary shadow-0" type="button">Add to cart</a>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <hr />
+
+                        <!-- Pagination -->
+                    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+                        <ul  class="pagination">
+                            <li th:each="pageNumber : ${pageNumbers}"  class="page-item">
+                                <a
+                                   th:class="${pageNumber == books.number + 1} ? 'active page-link' : 'page-link'"
+                                   th:href="@{/customers/books(page=${pageNumber})}"
+                                   th:text="${pageNumber}">
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                        <!-- Pagination -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MDB -->
+</body>
+
+<section layout:fragment="optional">
+    <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"
+    ></script>
+</section>
+
+</html>

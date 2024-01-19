@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminLayout}">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <title>Hello, world!</title>
+</head>
+
+
+<body>
+<section layout:fragment="content" class="content-wrapper">
+  <div class="container">
+    <div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>#Number</th>
+          <th>Name</th>
+          <th class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="category : ${categories}" th:if="${category != null}">
+          <td th:text="${category.getId()}"></td>
+          <td th:text="${category.getName()}"></td>
+          <td>
+            <a type="button"
+               class="btn btn-success"
+               th:href="@{/staff/categories/update/{categoryId}(categoryId=${category.getId()})}">
+              Edit
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end">
+        <a class="btn btn-primary" th:href="@{/staff/categories/new}">create</a>
+      </div>
+    </div>
+  </div> <!-- /container -->
+</section>
+</body>
+</html>

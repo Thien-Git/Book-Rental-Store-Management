@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminLayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BookShelf Management</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+</head>
+<body>
+
+<section layout:fragment="content"  class="content-wrapper">
+
+        <!-- Main content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form th:action="@{/staff/bookshelf/search-blank-case}" method="post">
+                        <label for="searchQuery">Search:</label>
+                        <input type="text" id="searchQuery" name="num" placeholder="Enter number of blank space.">
+                        <input  class="btn-primary" type="submit" value="Search">
+                    </form>
+                    <form th:action="@{/staff/bookshelf/search-bookId}" method="post">
+                        <label for="searchQuery">Search By Book Id:</label>
+                        <input type="text" id="" name="bookId" placeholder="Enter Book id">
+                        <input  class="btn-primary" type="submit" value="Search">
+                    </form>
+                    <br>
+                    <div class="col-6 offset-3"><a class="btn btn-primary" th:href="@{/staff/bookshelf/create}">Create</a></div>
+
+                    <table id="myTable"
+                           class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                           style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Bookshelf Code</th>
+                            <th>Case Number</th>
+                            <th> Available Blank</th>
+                            <th> Capacity</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${bookShelfList}">
+                            <td th:text="${c.getId()}"></td>
+                            <td th:text="${c.getBookshelfCode()+' - '+c.getCaseNumber() }"></td>
+                            <td th:text="${c.getCaseNumber()}"></td>
+                            <td th:text="${c.getAvailableBlank()}"></td>
+                            <td th:text="${c.getCapacity()}"></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                  <!-- contract image                           -->
+             </div>
+        </div>
+
+    <br/>
+    <br/>
+</section>
+<!-- ./wrapper -->
+</body>
+<section layout:fragment="optional">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+    </script>
+
+</section>
+
+</html>

@@ -1,0 +1,79 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+>
+<head>
+    <style>
+        .return-btn {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="content" class="d-flex flex-column gap-3 py-5 container">
+    <a href="/customers/orders" class="btn btn-primary mb-3 return-btn">Back to your orders</a>
+    <section class="container">
+        <h1 th:text="${'Books in order: #' + orderId}" class="mb-5"></h1>
+        <ul class="list-group">
+            <li class="row justify-content-center mb-3" th:each="order: ${orderDetails}">
+                <div class="col-md-12">
+                    <div class="card shadow-0 border rounded-3">
+                        <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-xl-3 col-md-4">
+                                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                                        <img th:src="${order.getBookByBookId().getPhoto()}"
+                                             class="w-100"
+                                             alt="..."
+                                        />
+                                        <a href="#!">
+                                            <div class="hover-overlay">
+                                                <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-5 col-sm-7 d-flex flex-column justify-content-center">
+                                    <h5 th:text="${order.getBookByBookId().title}"></h5>
+                                    <div class="d-flex flex-row">
+                                        <div class="text-warning mb-1 me-2" th:if="${order.isRated()}">
+                                            <span>Rating: </span>
+                                            <span
+                                                  th:text="${order.getRating() + ' / 5'}"
+                                                  class="ms-1"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <p th:if="${order.isRated() and order.getReview() != ''}" th:text="${'Your review: ' + order.getReview()}" class="text mb-4 mb-md-0"></p>
+                                </div>
+                                <div class="col-xl-3 col-md-3 col-sm-5 d-flex flex-column justify-content-center align-items-center">
+                                    <div class="d-flex flex-row align-items-center mb-1">
+                                        <h4 class="mb-1 me-1" th:text="${'Price: $' + order.getBookByBookId().getPricePerDay()}">$34,50</h4>
+                                    </div>
+                                    <div class="mt-4">
+                                        <a th:unless="${order.isRated() or order.getOrdersByOrderId().getOrderStatus().toString() == 'BOOKING'}"
+                                             th:href="${'/customers/review/' + orderId +'/'+ order.getId()}"
+                                           class="btn btn-primary"
+                                           type="button"
+                                        >Review</a>
+                                        <button th:if="${order.isRated()}"
+                                                class="btn btn-secondary" disabled
+                                                type="button">Reviewed</button>
+
+                                        <button th:if="${order.getOrdersByOrderId().getOrderStatus().toString() == 'BOOKING'}"
+                                                class="btn btn-secondary" disabled
+                                                type="button">Booking</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

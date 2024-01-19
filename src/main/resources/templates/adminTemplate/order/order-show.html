@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminLayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Employee Management</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+</head>
+<body>
+
+
+<section layout:fragment="content"  class="content-wrapper">
+
+    <br><div class="content-header"> <h5>Order Management</h5>
+    <a th:href="@{/staff/orders/show-all}" class="btn btn-success">All Order</a>
+    <a th:href="@{/staff/orders/show-by-status/{status}(status=${booking})}" class="btn btn-success">Booking</a>
+    <a th:href="@{/staff/orders/show-by-status/{status}(status=${rent})}" class="btn btn-warning">Rent</a>
+    <a th:href="@{/staff/orders/show-by-status/{status}(status=${overdue})}" class="btn btn-primary">Over Due</a>
+</div>
+    <div class="content ">
+        <!-- Main content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table id="myTable"
+                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                            style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Customer Name</th>
+                            <th>Total Amount</th>
+                            <th>Booking Date</th>
+                            <th>Rent Date</th>
+                            <th>Return Date</th>
+                            <th>Order Status</th>
+                            <th>Action:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${list}">
+                            <td th:text="${c.getId()}"></td>
+                            <td th:text="${c.getCustomerByCustomerId().getName()}"></td>
+                            <td th:data-money="${c.getTotalAmount()}" ></td>
+                            <td th:data-time="${c.getBookingDate()}"></td>
+                            <td th:data-time="${c.getRentDate()}"></td>
+                            <td th:data-time="${c.getReturnDate()}"></td>
+                            <td th:text="${c.getOrderStatus()}"></td>
+                            <td>
+                                <a th:href="@{/staff/orders/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Detail</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- contract image                           -->
+                <div id="contract-container" class="contract-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+</section>
+<!-- ./wrapper -->
+</body>
+<section layout:fragment="optional">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+        //format
+
+        const elements=document.querySelectorAll('[data-money]');
+        elements.forEach((element) => {
+            const moneyValue = parseFloat(element.dataset.money);
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+            });
+            const formattedAmount = formatter.format(moneyValue);
+            element.textContent = formattedAmount;
+
+        });
+//format day time
+        const date=document.querySelectorAll('[data-time]');
+        date.forEach((element) => {
+            const datePart = element.dataset.time.split(' ');
+// Convert the date string to a Date object
+            const date = new Date(datePart);
+// Format the Date object to the desired format
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = date.toLocaleDateString('en-US', options);
+            console.log(formattedDate);
+            element.textContent = formattedDate;
+
+        });
+    </script>
+
+
+<!--    <script th:inline="javascript">-->
+
+<!--        var error = [[${alertError}]];-->
+<!--        var message = [[${alertMessage}]];-->
+<!--        console.log(message);-->
+
+<!--        if(message!=null && message.length != 0)-->
+<!--        {-->
+<!--            swal({-->
+<!--                title: "Message!",-->
+<!--                text: message,-->
+<!--                icon: "success",-->
+<!--            });-->
+
+<!--        }-->
+<!--        else if(error!=null && error.length != 0)-->
+<!--        {-->
+<!--            swal({-->
+<!--                title: "Error!",-->
+<!--                text: error,-->
+<!--                icon: "error",-->
+<!--            });-->
+<!--        }-->
+
+
+
+<!--    </script>-->
+</section>
+
+</html>

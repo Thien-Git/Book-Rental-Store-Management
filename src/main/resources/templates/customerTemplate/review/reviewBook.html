@@ -1,0 +1,38 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerLayout}">
+>
+<body>
+<main layout:fragment="content" class="d-flex gap-3 py-5 container">
+    <section class="container">
+        <h1 th:text="${'Review for order detail: ' + orderDetailId}"></h1>
+        <form method="post"
+              th:action="@{/customers/review/{orderId}/{detailId}(orderId=${orderId}, detailId=${orderDetailId})}"
+              th:object="${reviewObj}">
+            <div class="rate bg-black py-3 text-white mb-3">
+                <h6 class="mb-0 text-center fs-2">Rating</h6>
+                <div class="rating">
+                    <input type="radio" name="rating" value="5" id="5" th:field="*{rating}">
+                    <label for="5">☆</label>
+                    <input type="radio" name="rating" value="4" id="4" th:field="*{rating}">
+                    <label for="4">☆</label>
+                    <input type="radio" name="rating" value="3" id="3" th:field="*{rating}">
+                    <label for="3">☆</label>
+                    <input type="radio" name="rating" value="2" id="2" th:field="*{rating}">
+                    <label for="2">☆</label>
+                    <input type="radio" name="rating" value="1" id="1" th:field="*{rating}">
+                    <label for="1">☆</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <textarea th:field="*{review}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>
